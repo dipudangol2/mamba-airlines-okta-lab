@@ -3,7 +3,7 @@ For creating a new tenant with custom logo and color, in the admin dashboard go 
 - Go to `Admin console > Customizations > Brands > Create Brand` to create a new brand. 
 - Choose the logo of your choice, Add color scheme you like, change favicon for the page for the brand and you can also customize the login and logout page or include the login/logout flow of your own.
 - There are many other options such as custom pages, emails for different activities, custom domains setup and other settings like animation, privacy policy, etc.
-![Pasted image 20260712223946](Pasted%20image%2020260712223946.png)
+![Pasted image 20260712223946](./Attachments/Pasted%20image%2020260712223946.png)
 
 ![Pasted image 20260712224005](Pasted%20image%2020260712224005.png)
 
