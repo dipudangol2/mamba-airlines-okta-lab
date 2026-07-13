@@ -32,8 +32,13 @@ You can assign administrator roles by going to `Admin Console > Security > Admin
 ---
 # Password policy: minimum 12 characters, complexity required, 90-day expiry
 
-![Pasted image 20260712222305](./Attachments/Pasted%20image%2020260712222305.png)
+![Password Policy set](./Attachments/Pasted%20image%2020260712222305.png)
 
-![Pasted image 20260712222824](./Attachments/Pasted%20image%2020260712222824.png)
+![Password Expiry](./Attachments/Pasted%20image%2020260712222824.png)
+
+---
+# Postman GET /api/v1/users returns all seven personas with a 200 response
+
+![Postman API get all users](Attachments/Pasted%20image%2020260713110338.png)
 
 ---
