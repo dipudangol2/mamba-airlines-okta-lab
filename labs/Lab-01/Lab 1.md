@@ -51,4 +51,5 @@ Setup postman and import all the postman collections. Generate an api key for yo
 
 ---
 
-[Okta tenant Architecture](./Okta%20tenant%20Architecture.dark.svg)
+# Okta Tenant Architecture
+![Okta tenant Architecture](./Okta%20tenant%20Architecture.dark.svg)
