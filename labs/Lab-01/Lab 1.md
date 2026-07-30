@@ -7,6 +7,7 @@ For creating a new tenant with custom logo and color, in the admin dashboard go 
 ![Pasted image 20260712223946](./Attachments/Pasted%20image%2020260712223946.png)
 
 ![Pasted image 20260712224005](./Attachments/Pasted%20image%2020260712224005.png)
+Instead of creating a seperate brand and assigning it a new domain, i updated the old integrator brand with the custom logo and color scheme later.
 
 ---
 # All seven NBA personas exist as Okta users with profile attributes populated
@@ -25,12 +26,14 @@ You can assign administrator roles by going to `Admin Console > Security > Admin
 ![Pasted image 20260712223545](./Attachments/Pasted%20image%2020260712223545.png)
 
 ---
-# MFA enrollment policy requires all users to enrol Okta Verify within 7 days 
+# MFA enrollment policy requires all users to enroll Okta Verify within 7 days 
+To add MFA enrollment policy for all users to enroll Okta Verify within 7 days go to `Security > Authenitcators > Enrollment ` and add a new policy for users to enroll Okta verify and add a due date.
 
 ![Pasted image 20260712223423](./Attachments/Pasted%20image%2020260712223423.png)
 
 ---
 # Password policy: minimum 12 characters, complexity required, 90-day expiry
+Go to `Authenticators > Password (Actions) > Edit > Add new password Policy` and create a new password policy with all the listed requirements.
 
 ![Password Policy set](./Attachments/Pasted%20image%2020260712222305.png)
 
@@ -38,7 +41,14 @@ You can assign administrator roles by going to `Admin Console > Security > Admin
 
 ---
 # Postman GET /api/v1/users returns all seven personas with a 200 response
-
+Setup postman and import all the postman collections. Generate an api key for your integrator account and setup environment variables for your integrator url and api key. The collection should work with the endpoints.
 ![Postman API get all users](Attachments/Pasted%20image%2020260713110338.png)
 
 ---
+
+# Admin console with Mamba Airlines branding
+![](Attachments/Pasted%20image%2020260730094219.png)
+
+---
+
+[Okta tenant Architecture](./Okta%20tenant%20Architecture.dark.svg)
