@@ -45,11 +45,9 @@ Setup postman and import all the postman collections. Generate an api key for yo
 ![Postman API get all users](Attachments/Pasted%20image%2020260713110338.png)
 
 ---
-
 # Admin console with Mamba Airlines branding
 ![](Attachments/Pasted%20image%2020260730094219.png)
 
 ---
-
 # Okta Tenant Architecture
 ![Okta tenant Architecture](./Okta%20tenant%20Architecture.dark.svg)
