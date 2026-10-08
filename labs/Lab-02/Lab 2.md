@@ -1,4 +1,4 @@
-# Steps Performed for the setup
+# Active Directory Integration
 ---
 ## Phase 1: Set Up AD Domain, OUs, and Users (`DC01`)
 
