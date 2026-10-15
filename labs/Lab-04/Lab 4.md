@@ -100,3 +100,67 @@ Salesforce Page for Stephen Curry:
 **Salesforce SSO configuration screenshot**
 
 ![](Attachments/Pasted%20image%2020261008215456.png)
+
+---
+### Key Concepts Recap
+
+#### 1. The SAML actors and the Assertion
+
+Three parties are involved in every SAML login:
+
+- **User**: the person trying to get into an app (e.g. LeBron opening Salesforce).
+- **Service Provider (SP)**: the app being accessed. Here, Salesforce.
+- **Identity Provider (IdP)**: the system that authenticates the user and vouches for them. Here, Okta.
+
+Salesforce never sees LeBron's Okta password. Instead, Okta verifies him and sends Salesforce an **Assertion**: a signed XML document that says, in effect, "I am Okta, I authenticated this person just now, here is who they are, and this message is intended for Salesforce." Salesforce accepts it because it was configured in advance to trust Okta's certificate.
+
+_Analogy:_ a passport. The border officer (Salesforce) doesn't know you personally, but trusts the issuing government (Okta) and checks the document's security features (signature).
+
+#### 2. IdP-initiated vs SP-initiated flow
+
+The difference is **where the user starts**, and that changes the sequence of messages.
+
+- **IdP-initiated:** the user is already in Okta and clicks the Salesforce tile. Okta builds the assertion and the browser posts it straight to Salesforce. Two hops.
+- **SP-initiated:** the user types the Salesforce URL directly. Salesforce has no session for them, so it sends an **AuthnRequest** redirecting the browser to Okta ("please authenticate this person, and send them back here afterwards"). Okta authenticates, then returns the assertion to Salesforce. This needs the extra round trip because Okta wouldn't otherwise know which app the user was heading to or where to send the response.
+
+_Why both matter:_ IdP-initiated is common for dashboard-style access. SP-initiated is what happens when users click bookmarks or email links to Salesforce, which in practice is most of the time.
+
+#### 3. X.509 certificates and signature validation
+
+Okta signs each assertion with its **private key**. Salesforce holds Okta's **public certificate** (the one you pasted into the Signature Certificate field) and uses it to check the signature. If the signature checks out, Salesforce knows two things: the assertion really came from Okta, and nobody altered it in transit.
+
+_Failure scenario:_ if Okta rotates its signing certificate and Salesforce still has the old public cert, every login fails with a signature validation error even though nothing else changed. This is why certificate expiry tracking is a standard operational task in SSO programmes.
+
+#### 4. FederationIdentifier (the matching problem)
+
+A valid, signed assertion isn't enough. Salesforce still has to decide _which Salesforce user_ the assertion refers to. It does this by comparing a value in the assertion against the **Federation ID** field on user records.
+
+_Example:_ Okta sends `FederationIdentifier = lebron.james@mambaairlines.com`. Salesforce searches its users for that exact Federation ID. If the Salesforce record has `lebron.james@mamba-airlines.com` instead (one character different), no match is found and login fails, despite everything else being correct.
+
+This is the most common real-world SAML failure: the cryptography is fine, the _identity data_ doesn't line up.
+
+#### 5. My Domain
+
+My Domain gives your Salesforce org its own unique login URL (e.g. `yourcompany.my.salesforce.com`) instead of the shared generic one.
+
+- **SP-initiated SSO needs it:** Salesforce has to know which org, and therefore which IdP configuration, the user is trying to reach before it can redirect them to Okta. A shared generic URL can't answer that.
+- **IdP-initiated SSO doesn't strictly need it at the protocol level**, because the assertion carries what Salesforce needs to validate it.
+- **In practice it's effectively mandatory today:** Salesforce enforces My Domain for all orgs, and Okta's app config uses your domain values for the ACS URL and Entity ID.
+
+#### 6. Audience restriction
+
+Every assertion states which SP it is meant for (the Audience, which matches Salesforce's Entity ID). Salesforce rejects any assertion addressed to a different audience.
+
+_Why this exists:_ without it, an assertion issued for a low-security app could be captured and replayed against Salesforce. Audience restriction ties each assertion to one intended recipient.
+
+This is also why the Entity ID in your Salesforce config and the Audience value in Okta must match exactly, which is why the custom domain step appears on both sides.
+
+#### 7. Clock skew and assertion validity
+
+Assertions carry timestamps (`NotBefore` and `NotOnOrAfter`) that define a short validity window, usually a few minutes. If Okta's clock and Salesforce's clock disagree by more than the tolerance, a perfectly good assertion looks either "not yet valid" or "expired" and gets rejected.
+
+_Why the window is short:_ a stolen assertion is only usable for a very brief period, which limits replay attacks.
+
+#### 8. Single Logout (SLO)
+
+Normal SSO logs you _in_ everywhere from one place. Without SLO, logging out of Okta leaves your Salesforce session alive. With SLO configured (the logout URLs and checkboxes in your steps), signing out of one side tells the other to end its session too.
