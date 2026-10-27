@@ -81,9 +81,14 @@ Look at the rule that governs how the Okta session is _established_. If it still
 
 ![](Attachments/Pasted%20image%2020261015104111.png)
 
-**Passwordless AuthN flow Sequence diagram.*
+**Passwordless AuthN Registration Sequence diagram.**
 
-![Passwordless Sequence Diagram](./PasswordlessAuthFLow.dark.svg)
+![Passwordless Registration](PasswordlessRegistration.dark.svg)
+
+**Passwordless AuthN Login Sequence Diagram**
+
+![Passwordless Login](./PasswordlessLogin.dark.svg)
+
 ### Key Concepts Recap
 
 #### 1. How passwordless actually works (public-key cryptography)
